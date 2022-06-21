@@ -22,7 +22,7 @@ else:
     api_key = None
 
 if args.prowl is not None:
-    p = pyprowl.Prowl('8da97a64ad222fcfb6129a93d74c018927ba83fe')
+    p = pyprowl.Prowl(args.prowl)
 else:
     p = None
 
