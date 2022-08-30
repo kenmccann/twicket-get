@@ -155,12 +155,26 @@ def prebook(blockId, holdref, quantity, auth_token):
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:101.0) Gecko/20100101 Firefox/101.0',
                'content-type': 'application/json', 'Authorization': 'TOKEN ' + auth_token}
     response = s.post(url=url, data=json.dumps(data), cookies=cookies, headers=headers)
-    result = response.json()
-    if result['token']:
-        print(str(result['token']), result['redirectUrl'])
-        return {'token': result['token'], 'redirectUrl': result['redirectUrl'], 'invoiceNumber': result['invoiceNumber']}
+
+    if response.status_code == 200:
+        result = response.json()
+        if result['token']:
+            print(str(result['token']), result['redirectUrl'])
+            return {'token': result['token'], 'redirectUrl': result['redirectUrl'], 'invoiceNumber': result['invoiceNumber']}
+        else:
+            print('token empty. responseCode: ' + str(result['responseCode']))
     else:
-        print('token empty. responseCode: ' + str(result['responseCode']))
+        logging.error("Prebook – Status Not 200")
+        try:
+            logging.debug(f"JSON response {response.json()}")
+        except Exception:
+            try:
+                logging.debug(f"Text response {response.text}")
+            except Exception:
+                logging.debug(f"Plain response {response}")
+        print("\n\n")
+
+        return None
 
 
 if __name__ == '__main__':
