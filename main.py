@@ -59,19 +59,33 @@ def check_event_avail(event_id):
     payload = {}
     cookies = {'clientId': 'cf6de4c4-cca6-4425-b252-4c1360309a1c', 'territory': 'GB', 'locale': 'en_GB'}
     response = s.get(url=url, headers=headers, data=payload, cookies=cookies)
-    results = response.json()
-    itineraries = list()
 
-    if results['responseData']:
-        count = 0
-        for result in results['responseData']:
-            itineraries.append({'id': str(result['id']).split('@')[1], 'seats': str(result['splits'][0]),
-                                'type': result['type'], 'area': result['area'], 'section': result['section'],
-                                'row': result['row'], 'price': result['pricing']['prices'][0]['netSellingPrice'] / 100})
-            count += 1
-        return itineraries
+    if response.status_code == 200:
+        results = response.json()
+        itineraries = list()
+
+        if results['responseData']:
+            count = 0
+            for result in results['responseData']:
+                itineraries.append({'id': str(result['id']).split('@')[1], 'seats': str(result['splits'][0]),
+                                    'type': result['type'], 'area': result['area'], 'section': result['section'],
+                                    'row': result['row'], 'price': result['pricing']['prices'][0]['netSellingPrice'] / 100})
+                count += 1
+            return itineraries
+        else:
+            return None
     else:
-        return None
+        print("\n\n")
+        try:
+            logging.info(f"JSON response {response.json()}")
+        except Exception:
+            try:
+                logging.info(f"Text response {response.text}")
+            except Exception:
+                logging.info(f"Plain response {response}")
+        print("\n\n")
+
+        raise Exception("Event Avail: Statuscode not 200")
 
 
 def get_section(listing):
