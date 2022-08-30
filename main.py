@@ -118,12 +118,24 @@ def request_hold(blockId, quantity, auth_token):
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:101.0) Gecko/20100101 Firefox/101.0',
                'content-type': 'application/json', 'Authorization': 'TOKEN ' + auth_token}
     response = s.post(url=url, data=json.dumps(data), cookies=cookies, headers=headers)
-    result = response.json()
-    if result['holdReference']:
-        print(str(result['holdReference']))
-        return {'holdReference': result['holdReference'], 'expires': result['expires']}
+
+    if response.status_code == 200:
+        result = response.json()
+        if result['holdReference']:
+            return {'holdReference': result['holdReference'], 'expires': result['expires']}
+        else:
+            return None
     else:
-        print('holdReference empty. responseCode: ' + str(result['responseCode']))
+        logging.error("Request Hold – Status Not 200")
+        print("\n\n")
+        try:
+            logging.info(f"JSON response {response.json()}")
+        except Exception:
+            try:
+                logging.info(f"Text response {response.text}")
+            except Exception:
+                logging.info(f"Plain response {response}")
+        print("\n\n")
         return None
 
 
