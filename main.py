@@ -214,7 +214,7 @@ if __name__ == '__main__':
                     current = options.pop(0)
                     # check if current is available to checkout
                     ticket = get_ticket_avail(current['id'], current['seats'])
-                    if ticket['available'] and int(current['seats']) < 4:
+                    if ticket.get('available') and int(current['seats']) > 1 and int(current['seats']) < 4:
                         # If deliveryMethod is defined and the setting is "Meet Up", pass
                         if int(ticket['deliveryPlan'][0]['deliveryMethod']):
                             if int(ticket['deliveryPlan'][0]['deliveryMethod']) == 1:
