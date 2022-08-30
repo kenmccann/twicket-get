@@ -180,6 +180,7 @@ def prebook(blockId, holdref, quantity, auth_token):
 if __name__ == '__main__':
     format = "%(levelname)s %(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S", stream=sys.stdout)
+    backoff = 0
     if args.prowl is not None:
         logging.info("Main       : Prowl Notifications Enabled")
     logging.info("Main       : Initialized")
@@ -193,7 +194,19 @@ if __name__ == '__main__':
                  appName='twicket-get')
         logging.info("Main       : Entering main loop")
         while 1:
-            options = check_event_avail(args.event_id)
+            try:
+                options = check_event_avail(args.event_id)
+                backoff = 0
+            except Exception:
+                options = None
+                if backoff == 0:
+                    backoff = 2
+                else:
+                    backoff += backoff
+
+                logging.debug(f"Response is not 200, backoff attempt by {backoff} seconds")
+                print(backoff, sep="", end="")
+
             if options:
                 logging.info("Main loop   : " + str(len(options)) + " options found")
                 options.sort(key=get_section)
@@ -234,9 +247,9 @@ if __name__ == '__main__':
             else:
                 logging.info("Main loop  : No tickets found")
             if args.time_delay is not None:
-                sleep(args.time_delay)
+                sleep(args.time_delay + backoff)
             else:
-                sleep(2)
+                sleep(2 + backoff)
 
 
     except KeyboardInterrupt:
