@@ -32,7 +32,7 @@ def get_ticket_avail(inventory_id, seats):
     url = 'https://www.twickets.live/services/inventory/' + str(inventory_id) + '?api_key=' + api_key + '&qty=' + str(seats)
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:101.0) Gecko/20100101 Firefox/101.0'}
     cookies = {'clientId': 'cf6de4c4-cca6-4425-b252-4c1360309a1c', 'territory': 'GB', 'locale': 'en_GB'}
-    response = s.get(url=url, headers=headers)
+    response = s.get(url=url, headers=headers, cookies=cookies)
     results = response.json()
     return results
 
