@@ -98,11 +98,17 @@ def perform_login(username, password):
     cookies = {'clientId': 'cf6de4c4-cca6-4425-b252-4c1360309a1c', 'territory': 'GB', 'locale': 'en_GB'}
     data = {"login": username, "password": password, "accountType": "U"}
     response = s.post(url=url, headers=headers, data=json.dumps(data), cookies=cookies)
-    result = response.json()
-    if result['responseData']:
-        return result['responseData']
+    if response.status_code == 200:
+        result = response.json()
+        if result['responseData']:
+            return result['responseData']
+        else:
+            logging.error("Login: No result")
+            return None
     else:
-        return None
+            logging.error("Login: Statuscode is not 200")
+            logging.debug(str(response))
+            return None
 
 
 def request_hold(blockId, quantity, auth_token):
