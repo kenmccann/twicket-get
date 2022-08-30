@@ -79,12 +79,12 @@ def check_event_avail(event_id):
     else:
         print("\n\n")
         try:
-            logging.info(f"JSON response {response.json()}")
+            logging.debug(f"JSON response {response.json()}")
         except Exception:
             try:
-                logging.info(f"Text response {response.text}")
+                logging.debug(f"Text response {response.text}")
             except Exception:
-                logging.info(f"Plain response {response}")
+                logging.debug(f"Plain response {response}")
         print("\n\n")
 
         raise Exception("Event Avail: Statuscode not 200")
@@ -131,12 +131,12 @@ def request_hold(blockId, quantity, auth_token):
         logging.error("Request Hold – Status Not 200")
         print("\n\n")
         try:
-            logging.info(f"JSON response {response.json()}")
+            logging.debug(f"JSON response {response.json()}")
         except Exception:
             try:
-                logging.info(f"Text response {response.text}")
+                logging.debug(f"Text response {response.text}")
             except Exception:
-                logging.info(f"Plain response {response}")
+                logging.debug(f"Plain response {response}")
         print("\n\n")
         return None
 
