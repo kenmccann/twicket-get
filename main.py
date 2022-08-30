@@ -33,8 +33,21 @@ def get_ticket_avail(inventory_id, seats):
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:101.0) Gecko/20100101 Firefox/101.0'}
     cookies = {'clientId': 'cf6de4c4-cca6-4425-b252-4c1360309a1c', 'territory': 'GB', 'locale': 'en_GB'}
     response = s.get(url=url, headers=headers, cookies=cookies)
-    results = response.json()
-    return results
+    if response.status_code == 200:
+        results = response.json()
+        return results
+    else:
+        logging.error("Ticket Avail – Statuscode not 200")
+        print("\n\n")
+        try:
+            logging.error(f"JSON response {response.json()}")
+        except Exception:
+            try:
+                logging.error(f"Text response {response.text}")
+            except Exception:
+                logging.error(f"Plain response {response}")
+        print("\n\n")
+        return {}
 
 
 def check_event_avail(event_id):
