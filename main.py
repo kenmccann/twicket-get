@@ -52,7 +52,10 @@ def get_ticket_avail(inventory_id, seats):
 
 def check_event_avail(event_id):
     url = 'https://www.twickets.live/services/g2/inventory/listings/' + str(event_id) + '?api_key=' + api_key
-    headers = {}
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:101.0) Gecko/20100101 Firefox/101.0',
+    'Referer': 'https://www.twickets.live/event/'+event_id,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json, text/plain, */*'}
     payload = {}
     cookies = {'clientId': 'cf6de4c4-cca6-4425-b252-4c1360309a1c', 'territory': 'GB', 'locale': 'en_GB'}
     response = s.get(url=url, headers=headers, data=payload, cookies=cookies)
