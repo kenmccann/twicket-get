@@ -210,7 +210,8 @@ if __name__ == '__main__':
                 print(backoff, sep="", end="")
 
             if options:
-                logging.info("Main loop   : " + str(len(options)) + " options found")
+                logging.debug("Main loop   : " + str(len(options)) + " options found")
+                print(" " + str(len(options)), end="")
                 options.sort(key=get_section)
                 while len(options) > 0:
                     current = options.pop(0)
@@ -240,14 +241,15 @@ if __name__ == '__main__':
                                          priority=0, url="https://www.twickets.live/block/" + str(ticket['block']['blockId']) + "," + str(current['seats']),
                                          appName='twicket-get')
                         else:
-                            print("Unable to hold ", str(current['id']), str(current['section']), str(current['row']))
-                            #print('Ticket dump:')
-                            #print(current, ticket)
+                            print("×", sep="", end="")
+                            logging.debug("Unable to hold ", str(current['id']), str(current['section']), str(current['row']))
                             continue
                     else:
-                        print("Ticket unavailable")
+                        print(".", end="")
             else:
-                logging.info("Main loop  : No tickets found")
+                logging.debug("Main loop  : No tickets found")
+                print(".", sep="", end="")
+
             if args.time_delay is not None:
                 sleep(args.time_delay + backoff)
             else:
