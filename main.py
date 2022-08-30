@@ -141,9 +141,16 @@ def request_hold(blockId, quantity, auth_token):
 
 def prebook(blockId, holdref, quantity, auth_token):
     url = 'https://www.twickets.live/services/bookings/prebook?api_key=' + api_key
-    data = {'blockId': blockId, 'holdReference': holdref, 'qty': quantity, 'attendees': [], 'deliveryMethodId': 4,
-            'buyerAddress': {"city": None, "line1": None, "line2": None, "recipientName": None, "postcode": None, "statecode": None},
-            'paymentMethod': 0, 'buyerLocale': 'en_GB'}
+
+    data = {"blockId": blockId,
+            "qty": quantity,
+            "holdReference": holdref,
+            "attendees":[{"address":None,"age":None,"emailAddress":None,"firstName":"John","lastName":"Doe","membershipNo":None,"phoneNumber":None,"postcode":None}, {"address":None,"age":None,"emailAddress":None,"firstName":"Jane","lastName":"Doe","membershipNo":None,"phoneNumber":None,"postcode":None}],
+            "deliveryMethodId":"4",
+            "buyerAddress":{"city":None,"line1":None,"line2":None,"recipientName":None,"postcode":None,"statecode":None},
+            "paymentMethod":"0",
+            "buyerLocale":"en_GB"}
+
     cookies = {'clientId': 'cf6de4c4-cca6-4425-b252-4c1360309a1c', 'territory': 'GB', 'locale': 'en_GB'}
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:101.0) Gecko/20100101 Firefox/101.0',
                'content-type': 'application/json', 'Authorization': 'TOKEN ' + auth_token}
